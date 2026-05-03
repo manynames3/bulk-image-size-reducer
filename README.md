@@ -6,7 +6,11 @@ Drop in a whole folder of images, choose an output format, tune quality and max 
 
 Live app: [bulk-image-size-reducer.pages.dev](https://bulk-image-size-reducer.pages.dev)
 
-![Bulk Image Size Reducer showing a completed batch of compressed real estate photos](docs/screenshot.png)
+![Bulk Image Size Reducer default interface](docs/screenshot.png)
+
+## Batch Results Example
+
+![Bulk Image Size Reducer showing a completed batch of compressed real estate photos](docs/batch-results.png)
 
 ## What It Does
 
@@ -66,5 +70,6 @@ Image processing happens in your browser. Files are decoded, resized, compressed
 |-- server.mjs    # Tiny static server for development
 |-- styles.css    # Responsive interface styling
 `-- docs/
-    `-- screenshot.png
+    |-- screenshot.png
+    `-- batch-results.png
 ```
