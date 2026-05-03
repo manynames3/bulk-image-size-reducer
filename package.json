@@ -1,0 +1,20 @@
+{
+  "name": "bulk-image-size-reducer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local batch image size reducer with drag-and-drop compression and ZIP export.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node --check app.js && node --check server.mjs"
+  },
+  "keywords": [
+    "image",
+    "compression",
+    "batch",
+    "webp",
+    "jpeg",
+    "png"
+  ],
+  "license": "MIT"
+}

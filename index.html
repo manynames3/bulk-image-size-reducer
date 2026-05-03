@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bulk Image Size Reducer</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">Local batch image compressor</p>
+          <h1>Bulk Image Size Reducer</h1>
+        </div>
+        <div class="header-metrics" aria-live="polite">
+          <span id="metric-count">0 images</span>
+          <span id="metric-size">0 B queued</span>
+          <span id="metric-saved">0% saved</span>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="tool-panel" aria-label="Image import and compression settings">
+          <div id="drop-zone" class="drop-zone" tabindex="0">
+            <input id="file-input" type="file" accept="image/*" multiple>
+            <div class="drop-mark" aria-hidden="true">+</div>
+            <h2>Drop images</h2>
+            <button id="browse-button" type="button" class="button secondary">Choose files</button>
+          </div>
+
+          <form id="settings-form" class="settings" autocomplete="off">
+            <fieldset>
+              <legend>Output</legend>
+              <div class="segmented" role="radiogroup" aria-label="Output format">
+                <label>
+                  <input type="radio" name="format" value="same">
+                  <span>Same</span>
+                </label>
+                <label>
+                  <input type="radio" name="format" value="jpeg">
+                  <span>JPEG</span>
+                </label>
+                <label>
+                  <input type="radio" name="format" value="webp" checked>
+                  <span>WebP</span>
+                </label>
+                <label>
+                  <input type="radio" name="format" value="png">
+                  <span>PNG</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <label class="range-row">
+              <span>Quality</span>
+              <input id="quality" type="range" min="1" max="100" value="82">
+              <output id="quality-output" for="quality">82</output>
+            </label>
+
+            <div class="grid-two">
+              <label>
+                <span>Max width</span>
+                <input id="max-width" type="number" min="1" inputmode="numeric" placeholder="Original">
+              </label>
+              <label>
+                <span>Max height</span>
+                <input id="max-height" type="number" min="1" inputmode="numeric" placeholder="Original">
+              </label>
+            </div>
+
+            <label>
+              <span>Filename suffix</span>
+              <input id="filename-suffix" type="text" value="-reduced" maxlength="48">
+            </label>
+
+            <label class="check-row">
+              <input id="no-upscale" type="checkbox" checked>
+              <span>Do not upscale</span>
+            </label>
+          </form>
+
+          <div class="actions">
+            <button id="process-button" type="button" class="button primary" disabled>Process batch</button>
+            <button id="zip-button" type="button" class="button secondary" disabled>Download ZIP</button>
+            <button id="clear-button" type="button" class="button ghost" disabled>Clear</button>
+          </div>
+        </section>
+
+        <section class="queue-panel" aria-label="Image queue">
+          <div class="queue-toolbar">
+            <div>
+              <h2>Queue</h2>
+              <p id="queue-status">No images selected</p>
+            </div>
+            <progress id="batch-progress" value="0" max="1" aria-label="Batch progress"></progress>
+          </div>
+
+          <div id="empty-state" class="empty-state">
+            <div class="empty-icon" aria-hidden="true"></div>
+            <p>Images appear here after import.</p>
+          </div>
+
+          <div id="queue-list" class="queue-list" aria-live="polite"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
