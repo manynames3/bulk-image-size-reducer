@@ -1,6 +1,6 @@
 # Bulk Image Size Reducer
 
-A fast, local-first batch image compressor for people who want the practical parts of Squoosh without feeding files through one at a time.
+A fast, browser-based batch image compressor for people who want the practical parts of Squoosh without feeding files through one at a time.
 
 Drop in a whole folder of images, choose an output format, tune quality and max dimensions, then download individual results or a single ZIP.
 
@@ -22,7 +22,7 @@ Live app: [bulk-image-size-reducer.pages.dev](https://bulk-image-size-reducer.pa
 
 Squoosh is excellent for carefully tuning one image, but its public app is not built for quick bulk work. This tool is meant for the everyday batch case: resize and reduce a set of images with consistent settings, then move on.
 
-## Run Locally
+## Run in Development
 
 No install step is required beyond Node.js.
 
@@ -63,7 +63,7 @@ Image processing happens in your browser. Files are decoded, resized, compressed
 .
 |-- app.js        # Batch processing, canvas export, and ZIP creation
 |-- index.html    # Static app shell
-|-- server.mjs    # Tiny local static server
+|-- server.mjs    # Tiny static server for development
 |-- styles.css    # Responsive interface styling
 `-- docs/
     `-- screenshot.png
