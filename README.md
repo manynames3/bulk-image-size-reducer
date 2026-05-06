@@ -8,6 +8,30 @@ Live app: [bulk-image-size-reducer.pages.dev](https://bulk-image-size-reducer.pa
 
 ![Bulk Image Size Reducer default interface](docs/screenshot.png)
 
+## About
+
+Bulk Image Size Reducer is a static web app for reducing many images locally in the browser. It is built for practical batch cleanup: convert to WebP, JPEG, PNG, or the source format; cap dimensions without upscaling; compare per-file savings; and export a completed batch as a ZIP.
+
+The project has no application backend and no upload pipeline. Image decode, resize, encode, preview, download, and ZIP generation all run client-side with browser APIs, which keeps the tool easy to host and keeps selected files on the user's device.
+
+## Tech Stack
+
+- HTML
+- CSS
+- JavaScript
+- Browser File APIs
+- Canvas API
+- Blob and Object URL APIs
+- Client-side ZIP generation
+- Node.js static development server
+
+## Engineering Highlights
+
+- Runs fully client-side with no image uploads or backend processing.
+- Handles batch queue state, previews, resizing, encoding, and ZIP export in vanilla JavaScript.
+- Uses browser-native APIs with zero runtime dependencies.
+- Includes ADRs and a C4-style architecture diagram for the main implementation decisions.
+
 ## Batch Results Example
 
 ![Bulk Image Size Reducer showing a completed batch of compressed real estate photos](docs/batch-results.png)
@@ -25,6 +49,11 @@ Live app: [bulk-image-size-reducer.pages.dev](https://bulk-image-size-reducer.pa
 ## Why This Exists
 
 Squoosh is excellent for carefully tuning one image, but its public app is not built for quick bulk work. This tool is meant for the everyday batch case: resize and reduce a set of images with consistent settings, then move on.
+
+## Architecture
+
+- [Architecture overview and C4 diagram](docs/architecture.md)
+- [Architecture decision records](docs/adrs/README.md)
 
 ## Run in Development
 
@@ -70,6 +99,8 @@ Image processing happens in your browser. Files are decoded, resized, compressed
 |-- server.mjs    # Tiny static server for development
 |-- styles.css    # Responsive interface styling
 `-- docs/
+    |-- architecture.md
+    |-- adrs/
     |-- screenshot.png
     `-- batch-results.png
 ```
