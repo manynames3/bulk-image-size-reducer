@@ -36,6 +36,22 @@ The project has no application backend and no upload pipeline. Image decode, res
 
 ![Bulk Image Size Reducer showing a completed batch of compressed real estate photos](docs/batch-results.png)
 
+## Real Workflow Example
+
+This tool is useful when a site needs many images prepared for the web, not just one polished image. In this example, a folder of high-resolution JPEGs was processed as a batch and exported as WebP files with consistent settings.
+
+![Bulk Image Size Reducer processing a batch of website images](docs/workflow-batch-processing.png)
+
+Before compression, the source JPEGs were multi-megabyte files:
+
+![Finder showing original JPEG image sizes before compression](docs/image-sizes-before.png)
+
+After batch export, the WebP versions are much smaller and ready for website use:
+
+![Finder showing reduced WebP image sizes after compression](docs/image-sizes-after.png)
+
+For image-heavy sites, this turns optimizing large batches, potentially hundreds of assets depending on browser memory, from a tedious one-at-a-time workflow into a repeatable batch process. Smaller image assets can help pages load faster and support better technical SEO by reducing unnecessary transfer size.
+
 ## What It Does
 
 - Accepts many images at once with drag-and-drop or file picker upload.
@@ -48,7 +64,7 @@ The project has no application backend and no upload pipeline. Image decode, res
 
 ## Why This Exists
 
-Squoosh is excellent for carefully tuning one image, but its public app is not built for quick bulk work. This tool is meant for the everyday batch case: resize and reduce a set of images with consistent settings, then move on.
+Squoosh is excellent for carefully tuning one image, but its public app is not built for quick bulk work. This tool is meant for the everyday batch case: resize and reduce a set of website images with consistent settings, then move on. It avoids launching Adobe Lightroom or a heavier desktop editing workflow just to prepare web images for faster-loading pages.
 
 ## Architecture
 
@@ -101,6 +117,9 @@ Image processing happens in your browser. Files are decoded, resized, compressed
 `-- docs/
     |-- architecture.md
     |-- adrs/
+    |-- image-sizes-after.png
+    |-- image-sizes-before.png
     |-- screenshot.png
+    |-- workflow-batch-processing.png
     `-- batch-results.png
 ```
