@@ -389,10 +389,11 @@ input[type="text"]:focus,
 }
 
 .app-footer {
-  padding: 24px 0 0;
+  padding: 44px 0 4px;
   color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 800;
+  font-size: 0.72rem;
+  font-weight: 700;
+  opacity: 0.62;
   text-align: center;
 }
 
