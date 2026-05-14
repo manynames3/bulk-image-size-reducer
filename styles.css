@@ -388,6 +388,18 @@ input[type="text"]:focus,
   overflow: hidden;
 }
 
+.app-footer {
+  padding: 24px 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.app-footer p {
+  margin: 0;
+}
+
 .queue-toolbar {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 160px;
