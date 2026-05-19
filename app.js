@@ -28,6 +28,12 @@ const els = {
 
 const encoder = new TextEncoder();
 const crcTable = buildCrcTable();
+const heicMimeTypes = new Set([
+  "image/heic",
+  "image/heif",
+  "image/heic-sequence",
+  "image/heif-sequence",
+]);
 
 els.browseButton.addEventListener("click", () => els.fileInput.click());
 els.fileInput.addEventListener("change", () => {
@@ -96,7 +102,7 @@ els.queueList.addEventListener("click", (event) => {
 });
 
 function addFiles(fileList) {
-  const files = Array.from(fileList).filter((file) => file.type.startsWith("image/"));
+  const files = Array.from(fileList).filter(isAcceptedImageFile);
   const existingKeys = new Set(state.items.map((item) => `${item.file.name}:${item.file.size}:${item.file.lastModified}`));
 
   for (const file of files) {
@@ -106,7 +112,7 @@ function addFiles(fileList) {
     state.items.push({
       id: createId(),
       file,
-      previewUrl: URL.createObjectURL(file),
+      previewUrl: isHeicFile(file) ? "" : URL.createObjectURL(file),
       outputBlob: null,
       outputUrl: null,
       outputMime: "",
@@ -181,7 +187,30 @@ async function processItem(item) {
   }
 }
 
-function decodeImage(file) {
+async function decodeImage(file) {
+  if (isHeicFile(file)) {
+    return decodeHeicImage(file);
+  }
+
+  return decodeRasterImage(file);
+}
+
+async function decodeHeicImage(file) {
+  if (typeof window.heic2any !== "function") {
+    throw new Error("HEIC support did not load. Refresh the page and try again.");
+  }
+
+  const converted = await window.heic2any({ blob: file, toType: "image/png" });
+  const blob = Array.isArray(converted) ? converted[0] : converted;
+
+  if (!(blob instanceof Blob)) {
+    throw new Error("The browser could not convert this HEIC image.");
+  }
+
+  return decodeRasterImage(blob);
+}
+
+function decodeRasterImage(file) {
   if ("createImageBitmap" in window) {
     return createImageBitmap(file, { imageOrientation: "from-image" })
       .then((bitmap) => ({
@@ -236,6 +265,9 @@ function canvasToBlob(canvas, mime, quality) {
 function getRequestedMime(file) {
   const selected = new FormData(els.settingsForm).get("format");
   if (selected === "same") {
+    if (isHeicFile(file)) {
+      return "image/webp";
+    }
     if (["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
       return file.type;
     }
@@ -282,7 +314,9 @@ function removeItem(id) {
   const index = state.items.findIndex((item) => item.id === id);
   if (index === -1) return;
 
-  URL.revokeObjectURL(state.items[index].previewUrl);
+  if (state.items[index].previewUrl) {
+    URL.revokeObjectURL(state.items[index].previewUrl);
+  }
   revokeOutput(state.items[index]);
   state.items.splice(index, 1);
   render();
@@ -290,7 +324,9 @@ function removeItem(id) {
 
 function clearQueue() {
   for (const item of state.items) {
-    URL.revokeObjectURL(item.previewUrl);
+    if (item.previewUrl) {
+      URL.revokeObjectURL(item.previewUrl);
+    }
     revokeOutput(item);
   }
   state.items = [];
@@ -330,15 +366,18 @@ function renderItem(item) {
     ? `${formatBytes(item.outputSize)} - ${item.dimensions} - ${getSavings(item.file.size, item.outputSize)} saved`
     : formatBytes(item.file.size);
   const errorText = item.error ? `<div class="error-text">${escapeHtml(item.error)}</div>` : "";
+  const preview = item.previewUrl
+    ? `<img src="${item.previewUrl}" alt="">`
+    : `<div class="thumb-label">${escapeHtml(getFileExtension(item.file.name) || "IMG")}</div>`;
 
   return `
     <article class="queue-item">
       <div class="thumb">
-        <img src="${item.previewUrl}" alt="">
+        ${preview}
       </div>
       <div class="file-meta">
         <div class="file-name" title="${escapeHtml(item.file.name)}">${escapeHtml(item.file.name)}</div>
-        <div class="file-submeta">${escapeHtml(item.file.type || "image")} - ${outputText}</div>
+        <div class="file-submeta">${escapeHtml(getFileTypeLabel(item.file))} - ${outputText}</div>
         ${errorText}
       </div>
       <div>
@@ -492,6 +531,26 @@ function extensionForMime(mime) {
   if (mime === "image/png") return ".png";
   if (mime === "image/webp") return ".webp";
   return ".img";
+}
+
+function isAcceptedImageFile(file) {
+  return file.type.startsWith("image/") || isHeicFile(file);
+}
+
+function isHeicFile(file) {
+  return heicMimeTypes.has(file.type.toLowerCase()) || /\.(heic|heif)$/i.test(file.name);
+}
+
+function getFileTypeLabel(file) {
+  if (file.type) return file.type;
+
+  const extension = getFileExtension(file.name);
+  return extension ? `image/${extension.toLowerCase()}` : "image";
+}
+
+function getFileExtension(name) {
+  const match = /\.([^.]+)$/.exec(name);
+  return match ? match[1].toUpperCase() : "";
 }
 
 function sanitizeZipPath(name) {

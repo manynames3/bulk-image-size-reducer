@@ -10,7 +10,7 @@ Live app: [bulk-image-size-reducer.pages.dev](https://bulk-image-size-reducer.pa
 
 ## About
 
-Bulk Image Size Reducer is a static web app for reducing many images locally in the browser. It is built for practical batch cleanup: convert to WebP, JPEG, PNG, or the source format; cap dimensions without upscaling; compare per-file savings; and export a completed batch as a ZIP.
+Bulk Image Size Reducer is a static web app for reducing many images locally in the browser. It is built for practical batch cleanup: import JPEG, PNG, WebP, HEIC, and HEIF files; convert to WebP, JPEG, PNG, or the source format when browser-supported; cap dimensions without upscaling; compare per-file savings; and export a completed batch as a ZIP.
 
 The project has no application backend and no upload pipeline. Image decode, resize, encode, preview, download, and ZIP generation all run client-side with browser APIs, which keeps the tool easy to host and keeps selected files on the user's device.
 
@@ -22,6 +22,7 @@ The project has no application backend and no upload pipeline. Image decode, res
 - Browser File APIs
 - Canvas API
 - Blob and Object URL APIs
+- Vendored `heic2any` HEIC/HEIF browser conversion
 - Client-side ZIP generation
 - Node.js static development server
 
@@ -29,7 +30,8 @@ The project has no application backend and no upload pipeline. Image decode, res
 
 - Runs fully client-side with no image uploads or backend processing.
 - Handles batch queue state, previews, resizing, encoding, and ZIP export in vanilla JavaScript.
-- Uses browser-native APIs with zero runtime dependencies.
+- Uses browser-native APIs for the main resize, encode, download, and ZIP pipeline.
+- Converts HEIC and HEIF inputs in-browser before sending them through the same canvas export flow.
 - Includes ADRs and a C4-style architecture diagram for the main implementation decisions.
 
 ## Batch Results Example
@@ -55,6 +57,7 @@ For image-heavy sites, this turns optimizing large batches, potentially hundreds
 ## What It Does
 
 - Accepts many images at once with drag-and-drop or file picker upload.
+- Imports JPEG, PNG, WebP, HEIC, and HEIF images.
 - Exports to WebP, JPEG, PNG, or the original supported format.
 - Compresses with a quality slider for JPEG and WebP.
 - Resizes by max width and/or max height while preserving aspect ratio.
@@ -102,7 +105,9 @@ Image processing happens in your browser. Files are decoded, resized, compressed
 ## Limitations
 
 - Compression uses the browser canvas encoder, so output can differ from Squoosh's full codec stack.
+- HEIC and HEIF inputs are converted in the browser before resize/export; choosing Same for these files exports WebP because browsers generally cannot encode HEIC from canvas.
 - Animated GIFs and animated WebP files are flattened to the first decoded frame.
+- Multi-image HEIC/HEIF files are flattened to the first decoded image.
 - Canvas export strips most metadata by default.
 - Very large batches are limited by browser memory.
 
@@ -114,6 +119,7 @@ Image processing happens in your browser. Files are decoded, resized, compressed
 |-- index.html    # Static app shell
 |-- server.mjs    # Tiny static server for development
 |-- styles.css    # Responsive interface styling
+|-- vendor/       # Vendored browser dependencies
 `-- docs/
     |-- architecture.md
     |-- adrs/

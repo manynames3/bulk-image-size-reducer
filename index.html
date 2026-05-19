@@ -22,7 +22,7 @@
       <main class="layout">
         <section class="tool-panel" aria-label="Image import and compression settings">
           <div id="drop-zone" class="drop-zone" tabindex="0">
-            <input id="file-input" type="file" accept="image/*" multiple>
+            <input id="file-input" type="file" accept="image/*,.heic,.heif" multiple>
             <div class="drop-arrow" aria-hidden="true">
               <span>Drag &amp; Drop Here!</span>
               <strong>↓</strong>
@@ -112,6 +112,7 @@
       </footer>
     </div>
 
+    <script src="./vendor/heic2any/dist/heic2any.min.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-# ADR 0004: Generate ZIP Downloads in the Browser Without Runtime Dependencies
+# ADR 0004: Generate ZIP Downloads in the Browser Without a ZIP Runtime Dependency
 
 ## Status
 
@@ -14,6 +14,6 @@ Generate ZIP files in `app.js` using in-browser Blob construction, CRC32 calcula
 
 ## Consequences
 
-- The app keeps zero runtime dependencies.
+- The app avoids adding a ZIP-specific runtime dependency.
 - ZIP generation is transparent and tailored to the app's needs.
 - The implementation should stay focused on simple stored entries; adding compression methods, directories, comments, or ZIP64 support would require revisiting this decision.

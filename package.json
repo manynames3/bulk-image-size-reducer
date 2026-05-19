@@ -14,7 +14,9 @@
     "batch",
     "webp",
     "jpeg",
-    "png"
+    "png",
+    "heic",
+    "heif"
   ],
   "license": "MIT"
 }
