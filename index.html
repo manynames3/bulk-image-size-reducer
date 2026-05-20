@@ -8,16 +8,30 @@
   </head>
   <body>
     <div class="app-shell">
-      <header class="app-header">
-        <div>
+      <header class="site-header">
+        <div class="brand-lockup" aria-label="Bulk Image Size Reducer">
+          <span class="brand-mark" aria-hidden="true">BI</span>
+          <span>Bulk Image Size Reducer</span>
+        </div>
+        <p>Private browser processing</p>
+      </header>
+
+      <section class="app-header" aria-label="Application summary">
+        <div class="hero-copy">
           <h1>Bulk Image Size Reducer</h1>
+          <p>Compress full image batches for faster websites without uploading files or opening a desktop editor.</p>
+          <div class="hero-pills" aria-label="Supported workflow highlights">
+            <span>JPEG, PNG, WebP</span>
+            <span>HEIC + HEIF</span>
+            <span>ZIP export</span>
+          </div>
         </div>
         <div class="header-metrics" aria-live="polite">
           <span id="metric-count">0 images</span>
           <span id="metric-size">0 B queued</span>
           <span id="metric-saved">0% saved</span>
         </div>
-      </header>
+      </section>
 
       <main class="layout">
         <section class="tool-panel" aria-label="Image import and compression settings">
@@ -29,6 +43,14 @@
             </div>
             <div class="drop-mark" aria-hidden="true">+</div>
             <button id="browse-button" type="button" class="button secondary">Choose files</button>
+          </div>
+
+          <div class="settings-heading">
+            <span aria-hidden="true"></span>
+            <div>
+              <h2>Compression Settings</h2>
+              <p>Set output, size, and filename rules</p>
+            </div>
           </div>
 
           <form id="settings-form" class="settings" autocomplete="off">

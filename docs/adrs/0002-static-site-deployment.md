@@ -16,4 +16,5 @@ The production deployment target is any static host that can serve `index.html`,
 
 - The app can be hosted on Cloudflare Pages, GitHub Pages, Netlify, Vercel, or any plain static host.
 - Deployment and rollback are straightforward because there is no backend runtime to coordinate.
+- High processing usage does not add server-side image processing cost; the scaling cost is static asset delivery under the chosen host's current plan and limits.
 - Features that need persistence, authentication, or remote processing should be evaluated with a new ADR before adding backend infrastructure.

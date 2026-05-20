@@ -51,6 +51,18 @@ flowchart TB
 
 The production app is a static site. The local server exists only for development convenience and serves files from the project root with `no-store` caching. No production API, database, object storage bucket, worker queue, or server-side image processor is required.
 
+## Cost Model
+
+The architecture separates app delivery from image processing:
+
+- The static host serves the app shell and browser assets.
+- The user's browser performs image decode, resize, compression, ZIP generation, and download creation.
+- User-selected source images and generated outputs are not uploaded by this project.
+
+As a result, processing more images does not add cloud processing jobs or application server compute. Usage can still increase static hosting traffic because each visitor downloads the app assets, including the vendored HEIC/HEIF converter. Hosting providers may charge, throttle, or apply limits based on their current static-site plans, request volume, bandwidth, or abuse policies.
+
+Adding server-side uploads, remote processing, persistent storage, background queues, user accounts, or analytics would create a different cost profile and should be reviewed as a separate architecture decision.
+
 ## Key Constraints
 
 - Processing large batches depends on browser memory and canvas limits.

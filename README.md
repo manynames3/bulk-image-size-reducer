@@ -98,6 +98,14 @@ The app is static, so it can be hosted on Cloudflare Pages, GitHub Pages, Netlif
 npx wrangler pages deploy . --project-name bulk-image-size-reducer
 ```
 
+## Cost Model
+
+The app does not run image processing in the cloud. Each visitor's browser decodes, resizes, compresses, previews, zips, and downloads their selected files on that visitor's device.
+
+That means heavy processing usage does not create per-image server CPU, worker, queue, storage, or upload costs for this project. The costs that can scale are ordinary static-site hosting costs: requests and bandwidth for serving `index.html`, `styles.css`, `app.js`, the vendored HEIC/HEIF converter, and documentation assets. Hosting providers may also enforce plan limits, bandwidth policies, or abuse protections, so production operators should check the current limits for their chosen static host.
+
+The cost model would change if the project later added uploads, server-side compression, stored image history, accounts, analytics, APIs, queues, or object storage.
+
 ## Privacy
 
 Image processing happens in your browser. Files are decoded, resized, compressed, and zipped client-side; they are not uploaded to an application server by this project.
