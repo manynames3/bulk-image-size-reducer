@@ -10,7 +10,7 @@ Many iPhone and macOS image workflows produce HEIC or HEIF files. Browser suppor
 
 ## Decision
 
-Accept `.heic` and `.heif` inputs and convert them in the browser with the vendored `heic2any` library before passing them through the existing canvas resize/export flow. When the output format is Same, HEIC and HEIF files export as WebP because browsers generally cannot encode HEIC from canvas.
+Accept `.heic` and `.heif` inputs and attempt native browser decoding first. If unavailable, load the vendored `heic2any` converter and pass its PNG output through the canvas resize/export flow. Terminate the converter worker after each file to release buffers. When the output format is Same, export HEIC/HEIF as WebP when supported, or PNG otherwise; the app does not encode HEIC.
 
 ## Consequences
 

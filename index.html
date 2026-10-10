@@ -1,140 +1,386 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#f8f9fb" />
+    <meta
+      name="description"
+      content="Resize and compress batches of photos privately on your device."
+    />
     <title>Bulk Image Size Reducer</title>
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="icon" href="./assets/brand-mark.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link
+      rel="preload"
+      href="./assets/fonts/InterVariable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="./premium.css" />
   </head>
   <body>
-    <div class="app-shell">
-      <header class="site-header">
-        <div class="brand-lockup" aria-label="Bulk Image Size Reducer">
-          <span class="brand-mark" aria-hidden="true">BI</span>
-          <span>Bulk Image Size Reducer</span>
+    <a class="skip-link" href="#workspace">Skip to workspace</a>
+    <main id="workspace" class="app-shell">
+      <div class="page-heading">
+        <div class="brand-lockup">
+          <img
+            class="brand-mark"
+            src="./assets/brand-mark.svg"
+            width="40"
+            height="40"
+            alt=""
+          />
+          <h1><span>Bulk Image</span> <span>Size Reducer</span></h1>
         </div>
-        <p>Private browser processing</p>
-      </header>
-
-      <section class="app-header" aria-label="Application summary">
-        <div class="hero-copy">
-          <h1>Bulk Image Size Reducer</h1>
-          <p>Compress full image batches for faster websites without uploading files or opening a desktop editor.</p>
-          <div class="hero-pills" aria-label="Supported workflow highlights">
-            <span>JPEG, PNG, WebP</span>
-            <span>HEIC + HEIF</span>
-            <span>ZIP export</span>
+        <button id="sample-button" class="button text-button" type="button">
+          Try sample photos <i class="icon arrow" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div id="notice" class="notice" role="status" hidden></div>
+      <div class="workspace">
+        <section class="image-workspace image-import" aria-label="Add images">
+          <div class="section-heading">
+            <h2>Your images <span id="metric-count" class="count">0</span></h2>
+            <button
+              id="clear-button"
+              class="button text-button danger-text"
+              type="button"
+              hidden
+            >
+              <i class="icon trash" aria-hidden="true"></i> Clear all
+            </button>
           </div>
-        </div>
-        <div class="header-metrics" aria-live="polite">
-          <span id="metric-count">0 images</span>
-          <span id="metric-size">0 B queued</span>
-          <span id="metric-saved">0% saved</span>
-        </div>
-      </section>
-
-      <main class="layout">
-        <section class="tool-panel" aria-label="Image import and compression settings">
-          <div id="drop-zone" class="drop-zone" tabindex="0">
-            <input id="file-input" type="file" accept="image/*,.heic,.heif" multiple>
-            <div class="drop-arrow" aria-hidden="true">
-              <span>Drag &amp; Drop Here!</span>
-              <strong>↓</strong>
-            </div>
-            <div class="drop-mark" aria-hidden="true">+</div>
-            <button id="browse-button" type="button" class="button secondary">Choose files</button>
-          </div>
-
-          <div class="settings-heading">
-            <span aria-hidden="true"></span>
-            <div>
-              <h2>Compression Settings</h2>
-              <p>Set output, size, and filename rules</p>
-            </div>
-          </div>
-
-          <form id="settings-form" class="settings" autocomplete="off">
-            <fieldset>
-              <legend>Output</legend>
-              <div class="segmented" role="radiogroup" aria-label="Output format">
-                <label>
-                  <input type="radio" name="format" value="same">
-                  <span>Same</span>
-                </label>
-                <label>
-                  <input type="radio" name="format" value="jpeg">
-                  <span>JPEG</span>
-                </label>
-                <label>
-                  <input type="radio" name="format" value="webp" checked>
-                  <span>WebP</span>
-                </label>
-                <label>
-                  <input type="radio" name="format" value="png">
-                  <span>PNG</span>
-                </label>
+          <input
+            id="file-input"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/avif,.jpg,.jpeg,.png,.webp,.heic,.heif,.avif"
+            aria-label="Choose images"
+            multiple
+            hidden
+          />
+          <div id="drop-zone" class="drop-zone">
+            <div id="empty-state" class="empty-state">
+              <div class="photo-stack" aria-hidden="true">
+                <img
+                  src="./assets/samples/forest-light-thumb.jpg"
+                  alt=""
+                  width="160"
+                  height="190"
+                /><img
+                  src="./assets/samples/mountain-ridge-thumb.jpg"
+                  alt=""
+                  width="160"
+                  height="190"
+                /><img
+                  src="./assets/samples/alpine-lake-thumb.jpg"
+                  alt=""
+                  width="160"
+                  height="190"
+                />
               </div>
-            </fieldset>
-
-            <label class="range-row">
-              <span>Quality</span>
-              <input id="quality" type="range" min="1" max="100" value="82">
-              <output id="quality-output" for="quality">82</output>
-            </label>
-
-            <div class="grid-two">
-              <label>
-                <span>Max width</span>
-                <input id="max-width" type="number" min="1" inputmode="numeric" placeholder="Original">
-              </label>
-              <label>
-                <span>Max height</span>
-                <input id="max-height" type="number" min="1" inputmode="numeric" placeholder="Original">
-              </label>
+              <h3>Add images</h3>
             </div>
-
-            <label>
-              <span>Filename suffix</span>
-              <input id="filename-suffix" type="text" value="-reduced" maxlength="48">
-            </label>
-
-            <label class="check-row">
-              <input id="no-upscale" type="checkbox" checked>
-              <span>Do not upscale</span>
-            </label>
-          </form>
-
-          <div class="actions">
-            <button id="process-button" type="button" class="button primary" disabled>Process batch</button>
-            <button id="zip-button" type="button" class="button secondary" disabled>Download ZIP</button>
-            <button id="clear-button" type="button" class="button ghost" disabled>Clear</button>
+            <button id="browse-button" class="button primary" type="button">
+              <i class="icon plus" aria-hidden="true"></i> Choose images
+            </button>
+            <p class="drop-label">
+              Drag &amp; drop here <i class="icon down" aria-hidden="true"></i>
+            </p>
+            <p class="formats">JPEG, PNG, WebP, HEIC, HEIF &amp; AVIF</p>
           </div>
         </section>
-
-        <section class="queue-panel" aria-label="Image queue">
-          <div class="queue-toolbar">
+        <aside class="settings-panel" aria-label="Output settings">
+          <div id="settings-details">
+            <h2 class="settings-heading">
+              <span
+                ><i class="icon sliders" aria-hidden="true"></i> Output
+                settings</span
+              ><span class="settings-short" id="settings-short"
+                >WebP · 82%</span
+              >
+            </h2>
+            <form id="settings-form" autocomplete="off">
+              <fieldset id="settings-fields">
+                <div class="preset-row">
+                  <label class="field-label" for="preset">Preset</label
+                  ><select id="preset">
+                    <option value="web">Website ready</option>
+                    <option value="small">Smallest files</option>
+                    <option value="detail">Keep more detail</option>
+                    <option value="custom">Custom</option>
+                  </select>
+                </div>
+                <fieldset class="format-field">
+                  <legend>Format</legend>
+                  <div class="segmented">
+                    <label
+                      ><input
+                        type="radio"
+                        name="format"
+                        value="webp"
+                        checked
+                      /><span>WebP</span></label
+                    ><label
+                      ><input type="radio" name="format" value="jpeg" /><span
+                        >JPEG</span
+                      ></label
+                    ><label
+                      ><input type="radio" name="format" value="png" /><span
+                        >PNG</span
+                      ></label
+                    ><label
+                      ><input type="radio" name="format" value="same" /><span
+                        >Same</span
+                      ></label
+                    >
+                  </div>
+                </fieldset>
+                <p id="format-note" class="field-note">
+                  WebP supports transparency.
+                </p>
+                <div class="quality-heading">
+                  <label for="quality">Quality</label
+                  ><output id="quality-output" for="quality">82%</output>
+                </div>
+                <input id="quality" type="range" min="1" max="100" value="82" />
+                <div class="range-labels" aria-hidden="true">
+                  <span>Smaller file</span><span>More detail</span>
+                </div>
+                <div class="field-divider"></div>
+                <div class="grid-two">
+                  <label
+                    >Max width <span class="unit">px</span
+                    ><input
+                      id="max-width"
+                      type="number"
+                      min="1"
+                      max="8192"
+                      step="1"
+                      inputmode="numeric"
+                      placeholder="Original"
+                      value="1920" /></label
+                  ><label
+                    >Max height <span class="unit">px</span
+                    ><input
+                      id="max-height"
+                      type="number"
+                      min="1"
+                      max="8192"
+                      step="1"
+                      inputmode="numeric"
+                      placeholder="Original"
+                  /></label>
+                </div>
+                <label class="check-row"
+                  ><input id="no-upscale" type="checkbox" checked /><span
+                    >Do not upscale</span
+                  ></label
+                >
+                <label class="suffix-label" for="filename-suffix"
+                  >Filename suffix</label
+                ><input
+                  id="filename-suffix"
+                  type="text"
+                  value="-reduced"
+                  maxlength="48"
+                  spellcheck="false"
+                />
+                <p id="filename-preview" class="field-note filename-preview">
+                  photo-reduced.webp
+                </p>
+                <p
+                  id="settings-error"
+                  class="error-text"
+                  role="alert"
+                  hidden
+                ></p>
+              </fieldset>
+            </form>
+          </div>
+          <div class="settings-footer">
+            <i class="icon shield" aria-hidden="true"></i
+            ><span>Files stay on your device.</span>
+          </div>
+        </aside>
+        <section
+          class="image-workspace image-results"
+          aria-label="Batch results"
+        >
+          <div id="batch-summary" class="batch-summary" hidden>
             <div>
-              <h2>Queue</h2>
-              <p id="queue-status">No images selected</p>
+              <span>Original</span><strong id="metric-size">0 B</strong>
             </div>
-            <progress id="batch-progress" value="0" max="1" aria-label="Batch progress"></progress>
+            <i class="icon arrow" aria-hidden="true"></i>
+            <div>
+              <span>Result</span><strong id="metric-output">0 B</strong>
+            </div>
+            <div class="savings">
+              <span id="savings-label">Saved</span
+              ><strong id="metric-saved">0%</strong>
+            </div>
           </div>
-
-          <div id="empty-state" class="empty-state">
-            <div class="empty-icon" aria-hidden="true"></div>
-            <p>Images appear here after import.</p>
+          <div class="queue-toolbar" id="queue-toolbar" hidden>
+            <p id="queue-status" role="status">No images selected</p>
+            <progress
+              id="batch-progress"
+              value="0"
+              max="1"
+              aria-label="Batch progress"
+              hidden
+            ></progress>
           </div>
-
-          <div id="queue-list" class="queue-list" aria-live="polite"></div>
+          <div id="queue-list" class="queue-list"></div>
         </section>
-      </main>
-
-      <footer class="app-footer">
-        <p>&copy;2026 SUPREME AI VENTURES LLC</p>
-      </footer>
-    </div>
-
-    <script src="./vendor/heic2any/dist/heic2any.min.js"></script>
+      </div>
+      <div class="action-bar">
+        <div class="action-status">
+          <span class="status-dot"></span
+          ><span id="action-status">No images selected</span>
+        </div>
+        <div class="actions">
+          <button
+            id="cancel-button"
+            type="button"
+            class="button secondary"
+            hidden
+          >
+            Stop batch</button
+          ><button
+            id="process-button"
+            type="button"
+            class="button primary"
+            disabled
+          >
+            Process batch</button
+          ><button
+            id="zip-button"
+            type="button"
+            class="button secondary"
+            disabled
+          >
+            <i class="icon download" aria-hidden="true"></i
+            ><span>Download ZIP</span>
+          </button>
+        </div>
+      </div>
+    </main>
+    <footer class="app-footer">&copy;2026 SUPREME AI VENTURES LLC</footer>
+    <dialog
+      id="preview-dialog"
+      class="preview-dialog"
+      aria-labelledby="preview-title"
+    >
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">BEFORE &amp; AFTER</p>
+          <h2 id="preview-title">Image preview</h2>
+        </div>
+        <button
+          class="icon-button"
+          type="button"
+          data-close="preview-dialog"
+          aria-label="Close preview"
+          title="Close preview"
+        >
+          <i class="icon close" aria-hidden="true"></i>
+        </button>
+      </div>
+      <fieldset class="preview-scale">
+        <legend class="sr-only">Preview scale</legend>
+        <div class="segmented">
+          <label
+            ><input
+              type="radio"
+              name="preview-scale"
+              value="fit"
+              checked
+            /><span>Fit</span></label
+          >
+          <label
+            ><input type="radio" name="preview-scale" value="actual" /><span
+              >100%</span
+            ></label
+          >
+        </div>
+      </fieldset>
+      <div class="comparison">
+        <figure>
+          <figcaption>
+            Original <span id="preview-original-size"></span>
+          </figcaption>
+          <div
+            class="preview-image"
+            tabindex="0"
+            role="region"
+            aria-label="Original image preview"
+          >
+            <img id="preview-original" alt="Original image" />
+            <span
+              id="preview-original-loading"
+              class="preview-loading"
+              role="status"
+              >Loading preview…</span
+            >
+          </div>
+        </figure>
+        <figure>
+          <figcaption>Result <span id="preview-result-size"></span></figcaption>
+          <div
+            class="preview-image"
+            tabindex="0"
+            role="region"
+            aria-label="Compressed image preview"
+          >
+            <img id="preview-result" alt="Compressed image" />
+            <span
+              id="preview-result-loading"
+              class="preview-loading"
+              role="status"
+              >Loading preview…</span
+            >
+          </div>
+        </figure>
+      </div>
+      <div class="dialog-footer">
+        <p id="preview-info"></p>
+        <button id="preview-download" type="button" class="button primary">
+          <i class="icon download" aria-hidden="true"></i> Download image
+        </button>
+      </div>
+    </dialog>
+    <dialog
+      id="clear-dialog"
+      class="clear-dialog"
+      aria-labelledby="clear-title"
+    >
+      <h2 id="clear-title">Clear this batch?</h2>
+      <p>
+        Undownloaded results will be removed. Your original files stay
+        untouched.
+      </p>
+      <div class="actions">
+        <button
+          type="button"
+          class="button secondary"
+          data-close="clear-dialog"
+          autofocus
+        >
+          Keep images</button
+        ><button id="confirm-clear" type="button" class="button destructive">
+          Clear batch
+        </button>
+      </div>
+    </dialog>
+    <noscript
+      ><p class="notice">
+        Enable JavaScript to process images on your device.
+      </p></noscript
+    >
     <script src="./app.js"></script>
   </body>
 </html>

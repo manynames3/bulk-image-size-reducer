@@ -10,7 +10,7 @@ Bulk Image Size Reducer is a single-page browser tool. It does not need user acc
 
 ## Decision
 
-The production deployment target is any static host that can serve `index.html`, `styles.css`, `app.js`, and assets in `docs/`. The included `server.mjs` is only a local development server.
+The production deployment target is any static host that can serve `index.html`, `styles.css`, `premium.css`, `app.js`, `assets/` and `vendor/`. The included `server.mjs` is only a local development server. `npm run build` packages an allowlisted `dist/` directory; tests, documentation and installed development packages are not deployed.
 
 ## Consequences
 

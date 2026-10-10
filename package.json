@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node server.mjs",
-    "check": "node --check app.js && node --check server.mjs"
+    "build": "node build.mjs",
+    "check": "node --check app.js && node --check server.mjs && node --check build.mjs",
+    "test": "playwright test"
   },
   "keywords": [
     "image",
@@ -18,5 +20,9 @@
     "heic",
     "heif"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0"
+  }
 }
